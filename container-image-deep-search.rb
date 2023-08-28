@@ -104,7 +104,16 @@ end
 
 def search(untar_dir, search_term)
   STDERR.puts "Searching for #{search_term}"
-  puts `grep --recursive --color=always "#{search_term}" "#{untar_dir}"`
+  occurances =
+    `
+      grep \
+        --recursive \
+        --color=always \
+        --files-with-matches \
+        "#{search_term}" "#{untar_dir}"
+    `.split
+  puts occurances
+  STDERR.puts "Found #{occurances.length} file#{occurances.length == 1 ? '' : 's'} containing #{search_term}"
 end
 
 main
