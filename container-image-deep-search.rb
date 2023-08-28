@@ -72,13 +72,13 @@ def make_tmp_dir(tmp_dir)
 end
 
 def pull_image(runtime, image)
-  puts "Pulling #{image}"
+  STDERR.puts "Pulling #{image}"
   `#{runtime} pull #{image}`
 end
 
 def save_tar(runtime, docker_image, docker_tar, bust_cache)
   if !File.exists? docker_tar or bust_cache
-    puts "Saving image #{docker_image} to tar"
+    STDERR.puts "Saving image #{docker_image} to tar"
     `#{runtime} save --output "#{docker_tar}" "#{docker_image}"`
   else
     puts 'Found image tar'
@@ -87,15 +87,15 @@ end
 
 def untar(untar_dir, docker_tar, bust_cache)
   if File.directory?(untar_dir) and !bust_cache
-    puts "Found untarred #{docker_tar}"
+    STDERR.puts "Found untarred #{docker_tar}"
   else
-    puts "Deeply untarring #{docker_tar}"
+    STDERR.puts "Deeply untarring #{docker_tar}"
 
     Dir.mkdir(untar_dir)
     `tar -xzf "#{docker_tar}" --directory "#{untar_dir}"`
 
     for tar in Dir.glob("#{untar_dir}/**/*.tar")
-      puts "Untarring layer #{File.basename File.dirname tar}"
+      STDERR.puts "Untarring layer #{File.basename File.dirname tar}"
       `tar -xzf "#{tar}" --directory "#{File.dirname tar}"`
       File.delete tar
     end
@@ -103,7 +103,7 @@ def untar(untar_dir, docker_tar, bust_cache)
 end
 
 def search(untar_dir, search_term)
-  puts "Searching for #{search_term}"
+  STDERR.puts "Searching for #{search_term}"
   puts `grep --recursive --color=always "#{search_term}" "#{untar_dir}"`
 end
 
