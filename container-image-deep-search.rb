@@ -91,7 +91,9 @@ def untar(untar_dir, docker_tar, bust_cache)
   else
     STDERR.puts "Deeply untarring #{docker_tar}"
 
-    Dir.mkdir(untar_dir)
+    FileUtils.rm_rf(untar_dir) if bust_cache
+
+    Dir.mkdir(untar_dir) unless Dir.exists? untar_dir
     `tar -xzf "#{docker_tar}" --directory "#{untar_dir}"`
 
     for tar in Dir.glob("#{untar_dir}/**/*.tar")
