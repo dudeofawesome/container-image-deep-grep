@@ -81,7 +81,7 @@ def save_tar(runtime, docker_image, docker_tar, bust_cache)
     STDERR.puts "Saving image #{docker_image} to tar"
     `#{runtime} save --output "#{docker_tar}" "#{docker_image}"`
   else
-    puts 'Found image tar'
+    STDERR.puts 'Found image tar'
   end
 end
 
